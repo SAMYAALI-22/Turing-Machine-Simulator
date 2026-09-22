@@ -1,0 +1,172 @@
+import type { Machine } from '@/engine/types';
+
+export const binaryIncrement: Machine = {
+  name: 'Binary Increment',
+  states: [
+    { id: 'q0', label: 'SCAN', role: 'start', position: { x: 15, y: 50 } },
+    { id: 'q1', label: 'CARRY', position: { x: 45, y: 50 } },
+    { id: 'q2', label: 'WRITE', position: { x: 75, y: 50 } },
+    { id: 'qAccept', label: 'ASCENSION', role: 'accept', position: { x: 92, y: 50 } },
+    { id: 'qReject', label: 'DEAD ZONE', role: 'reject', position: { x: 50, y: 90 } },
+  ],
+  inputAlphabet: ['0', '1'],
+  tapeAlphabet: ['0', '1', '□'],
+  blankSymbol: '□',
+  startState: 'q0',
+  acceptState: 'qAccept',
+  rejectState: 'qReject',
+  transitions: [
+    { id: 'bi0', source: 'q0', target: 'q0', read: '0', write: '0', direction: 'R' },
+    { id: 'bi1', source: 'q0', target: 'q0', read: '1', write: '1', direction: 'R' },
+    { id: 'bi2', source: 'q0', target: 'q1', read: '□', write: '□', direction: 'L' },
+    { id: 'bi3', source: 'q1', target: 'q2', read: '0', write: '1', direction: 'L' },
+    { id: 'bi4', source: 'q1', target: 'q1', read: '1', write: '0', direction: 'L' },
+    { id: 'bi5', source: 'q1', target: 'q2', read: '□', write: '1', direction: 'R' },
+    { id: 'bi6', source: 'q2', target: 'qAccept', read: '□', write: '□', direction: 'R' },
+  ],
+};
+
+export const evenOnes: Machine = {
+  name: 'Even Signal',
+  states: [
+    { id: 'q0', label: 'ORIGIN', role: 'start', position: { x: 16, y: 50 } },
+    { id: 'q1', label: 'ECHO', position: { x: 50, y: 26 } },
+    { id: 'q2', label: 'FLARE', position: { x: 50, y: 74 } },
+    { id: 'qAccept', label: 'ASCENSION', role: 'accept', position: { x: 84, y: 50 } },
+    { id: 'qReject', label: 'DEAD ZONE', role: 'reject', position: { x: 84, y: 88 } },
+  ],
+  inputAlphabet: ['0', '1'],
+  tapeAlphabet: ['0', '1', '□'],
+  blankSymbol: '□',
+  startState: 'q0',
+  acceptState: 'qAccept',
+  rejectState: 'qReject',
+  transitions: [
+    { id: 'eo0', source: 'q0', target: 'q1', read: '0', write: '0', direction: 'R' },
+    { id: 'eo1', source: 'q0', target: 'q2', read: '1', write: '1', direction: 'R' },
+    { id: 'eo2', source: 'q1', target: 'q1', read: '0', write: '0', direction: 'R' },
+    { id: 'eo3', source: 'q1', target: 'q2', read: '1', write: '1', direction: 'R' },
+    { id: 'eo4', source: 'q2', target: 'q2', read: '0', write: '0', direction: 'R' },
+    { id: 'eo5', source: 'q2', target: 'q1', read: '1', write: '1', direction: 'R' },
+    { id: 'eo6', source: 'q1', target: 'qReject', read: '□', write: '□', direction: 'R' },
+    { id: 'eo7', source: 'q2', target: 'qAccept', read: '□', write: '□', direction: 'R' },
+  ],
+};
+
+export const anbn: Machine = {
+  name: 'Divided Worlds (aⁿbⁿ)',
+  states: [
+    { id: 'q0', label: 'ORIGIN', role: 'start', position: { x: 12, y: 50 } },
+    { id: 'q1', label: 'MARK A', position: { x: 32, y: 28 } },
+    { id: 'q2', label: 'SCAN', position: { x: 52, y: 28 } },
+    { id: 'q3', label: 'MATCH B', position: { x: 72, y: 28 } },
+    { id: 'q4', label: 'REWIND', position: { x: 52, y: 72 } },
+    { id: 'q5', label: 'CLEANUP', position: { x: 72, y: 72 } },
+    { id: 'qAccept', label: 'ASCENSION', role: 'accept', position: { x: 90, y: 50 } },
+    { id: 'qReject', label: 'DEAD ZONE', role: 'reject', position: { x: 32, y: 88 } },
+  ],
+  inputAlphabet: ['a', 'b'],
+  tapeAlphabet: ['a', 'b', 'X', '□'],
+  blankSymbol: '□',
+  startState: 'q0',
+  acceptState: 'qAccept',
+  rejectState: 'qReject',
+  transitions: [
+    { id: 'ab0', source: 'q0', target: 'qAccept', read: '□', write: '□', direction: 'R' },
+    { id: 'ab1', source: 'q0', target: 'q1', read: 'a', write: 'X', direction: 'R' },
+    { id: 'ab2', source: 'q0', target: 'qReject', read: 'b', write: 'b', direction: 'R' },
+    { id: 'ab3', source: 'q1', target: 'q1', read: 'a', write: 'a', direction: 'R' },
+    { id: 'ab4', source: 'q1', target: 'q1', read: 'X', write: 'X', direction: 'R' },
+    { id: 'ab5', source: 'q1', target: 'q2', read: 'b', write: 'X', direction: 'R' },
+    { id: 'ab6', source: 'q2', target: 'q2', read: 'b', write: 'b', direction: 'R' },
+    { id: 'ab7', source: 'q2', target: 'q2', read: 'X', write: 'X', direction: 'R' },
+    { id: 'ab8', source: 'q2', target: 'q3', read: '□', write: '□', direction: 'L' },
+    { id: 'ab9', source: 'q3', target: 'q3', read: 'X', write: 'X', direction: 'L' },
+    { id: 'ab10', source: 'q3', target: 'q3', read: 'b', write: 'b', direction: 'L' },
+    { id: 'ab11', source: 'q3', target: 'q3', read: 'a', write: 'a', direction: 'L' },
+    { id: 'ab12', source: 'q3', target: 'q4', read: 'X', write: 'X', direction: 'L' },
+    { id: 'ab13', source: 'q4', target: 'q4', read: 'a', write: 'a', direction: 'L' },
+    { id: 'ab14', source: 'q4', target: 'q4', read: 'b', write: 'b', direction: 'L' },
+    { id: 'ab15', source: 'q4', target: 'q4', read: 'X', write: 'X', direction: 'L' },
+    { id: 'ab16', source: 'q4', target: 'q0', read: '□', write: '□', direction: 'R' },
+    { id: 'ab17', source: 'q2', target: 'qReject', read: 'a', write: 'a', direction: 'R' },
+  ],
+};
+
+export const palindrome: Machine = {
+  name: 'Palindrome Gate',
+  states: [
+    { id: 'q0', label: 'ORIGIN', role: 'start', position: { x: 15, y: 50 } },
+    { id: 'q1', label: 'SCAN R', position: { x: 35, y: 28 } },
+    { id: 'q2', label: 'SCAN L', position: { x: 55, y: 28 } },
+    { id: 'q3', label: 'MATCH', position: { x: 35, y: 72 } },
+    { id: 'q4', label: 'REWIND', position: { x: 55, y: 72 } },
+    { id: 'qAccept', label: 'ASCENSION', role: 'accept', position: { x: 85, y: 50 } },
+    { id: 'qReject', label: 'DEAD ZONE', role: 'reject', position: { x: 75, y: 88 } },
+  ],
+  inputAlphabet: ['0', '1'],
+  tapeAlphabet: ['0', '1', 'X', 'Y', '□'],
+  blankSymbol: '□',
+  startState: 'q0',
+  acceptState: 'qAccept',
+  rejectState: 'qReject',
+  transitions: [
+    { id: 'pal0', source: 'q0', target: 'qAccept', read: '□', write: '□', direction: 'R' },
+    { id: 'pal1', source: 'q0', target: 'q1', read: '0', write: 'X', direction: 'R' },
+    { id: 'pal2', source: 'q0', target: 'q1', read: '1', write: 'Y', direction: 'R' },
+    { id: 'pal3', source: 'q1', target: 'q1', read: '0', write: '0', direction: 'R' },
+    { id: 'pal4', source: 'q1', target: 'q1', read: '1', write: '1', direction: 'R' },
+    { id: 'pal5', source: 'q1', target: 'q2', read: '□', write: '□', direction: 'L' },
+    { id: 'pal6', source: 'q2', target: 'qAccept', read: 'X', write: '□', direction: 'R' },
+    { id: 'pal7', source: 'q2', target: 'qAccept', read: 'Y', write: '□', direction: 'R' },
+    { id: 'pal8', source: 'q2', target: 'q3', read: '0', write: '□', direction: 'L' },
+    { id: 'pal9', source: 'q2', target: 'q3', read: '1', write: '□', direction: 'L' },
+    { id: 'pal10', source: 'q3', target: 'q3', read: '0', write: '0', direction: 'L' },
+    { id: 'pal11', source: 'q3', target: 'q3', read: '1', write: '1', direction: 'L' },
+    { id: 'pal12', source: 'q3', target: 'q4', read: 'X', write: '□', direction: 'R' },
+    { id: 'pal13', source: 'q3', target: 'q4', read: 'Y', write: '□', direction: 'R' },
+    { id: 'pal14', source: 'q4', target: 'q4', read: '0', write: '0', direction: 'R' },
+    { id: 'pal15', source: 'q4', target: 'q4', read: '1', write: '1', direction: 'R' },
+    { id: 'pal16', source: 'q4', target: 'q0', read: '□', write: '□', direction: 'R' },
+    { id: 'pal17', source: 'q2', target: 'qReject', read: 'X', write: 'X', direction: 'R' },
+    { id: 'pal18', source: 'q2', target: 'qReject', read: 'Y', write: 'Y', direction: 'R' },
+    { id: 'pal19', source: 'q1', target: 'qReject', read: 'X', write: 'X', direction: 'R' },
+    { id: 'pal20', source: 'q1', target: 'qReject', read: 'Y', write: 'Y', direction: 'R' },
+  ],
+};
+
+export const unaryAddition: Machine = {
+  name: 'Unary Addition',
+  states: [
+    { id: 'q0', label: 'ORIGIN', role: 'start', position: { x: 20, y: 50 } },
+    { id: 'q1', label: 'CROSS', position: { x: 45, y: 50 } },
+    { id: 'q2', label: 'SHIFT', position: { x: 70, y: 50 } },
+    { id: 'qAccept', label: 'ASCENSION', role: 'accept', position: { x: 90, y: 50 } },
+    { id: 'qReject', label: 'DEAD ZONE', role: 'reject', position: { x: 50, y: 88 } },
+  ],
+  inputAlphabet: ['1', '+'],
+  tapeAlphabet: ['1', '+', '□'],
+  blankSymbol: '□',
+  startState: 'q0',
+  acceptState: 'qAccept',
+  rejectState: 'qReject',
+  transitions: [
+    { id: 'ua0', source: 'q0', target: 'q0', read: '1', write: '1', direction: 'R' },
+    { id: 'ua1', source: 'q0', target: 'q1', read: '+', write: '1', direction: 'R' },
+    { id: 'ua2', source: 'q1', target: 'q1', read: '1', write: '1', direction: 'R' },
+    { id: 'ua3', source: 'q1', target: 'q2', read: '□', write: '□', direction: 'L' },
+    { id: 'ua4', source: 'q2', target: 'qAccept', read: '1', write: '□', direction: 'R' },
+  ],
+};
+
+export const machineLibrary: Machine[] = [
+  evenOnes,
+  binaryIncrement,
+  anbn,
+  palindrome,
+  unaryAddition,
+];
+
+export function findMachineByName(name: string): Machine | undefined {
+  return machineLibrary.find((machine) => machine.name === name);
+}
